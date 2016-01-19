@@ -10,6 +10,7 @@ from random import shuffle
 from skimage.io import imread
 from scipy.misc import imresize
 import numpy as np
+from PIL import Image
 import caffe
 from utils import get_id_classes 
 
@@ -17,7 +18,7 @@ def main():
   ##
   preprocess_mode = 'pad'
   im_sz = 500
-  #file_src_images = 'train_small.txt'
+  #file_src_images = 'train.txt'
   class_names = ['bird', 'bottle', 'chair']
   test_ratio = 0.1
   ##
@@ -28,12 +29,14 @@ def main():
 
   ## Train
   # Images
+  print('Train images')
   path_src = 'images/'
   path_dst = 'train_images_3_lmdb'
   #train_imgs = get_src_imgs(file_src_images, ext)
   convert2lmdb(path_src, train_imgs, path_dst, class_ids, preprocess_mode, im_sz, 'image')
 
   # Labels
+  print('Train labels')
   path_src = 'labels/'
   path_dst = 'train_labels_3_lmdb'
   #train_imgs = get_src_imgs(file_src_images, ext)
@@ -41,11 +44,13 @@ def main():
 
   ## Test
   # Images
+  print('Test images')
   path_src = 'images/'
   path_dst = 'test_images_3_lmdb'
   convert2lmdb(path_src, test_imgs, path_dst, class_ids, preprocess_mode, im_sz, 'image')
 
   # Labels
+  print('Test labels')
   path_src = 'labels/'
   path_dst = 'test_labels_3_lmdb'
   convert2lmdb(path_src, test_imgs, path_dst, class_ids, preprocess_mode, im_sz, 'label')
@@ -69,9 +74,11 @@ def split_train_test_imgs(class_names, ext, test_ratio):
 
         current_line += 1
 
-
   shuffle(train_imgs)
   shuffle(test_imgs)
+
+  print(str(len(train_imgs)) + ' train images')
+  print(str(len(test_imgs)) + ' test images')
 
   return train_imgs, test_imgs
 
@@ -107,7 +114,8 @@ def convert2lmdb(path_src, src_imgs, path_dst, class_ids, preprocess_mode, im_sz
 
   with db.begin(write=True) as in_txn:
     for idx, img_name in enumerate(src_imgs):
-      img = imread(os.path.join(path_src + img_name))
+      #img = imread(os.path.join(path_src + img_name))
+      img = np.array(Image.open(os.path.join(path_src + img_name)))
       img = img.astype(np.uint8)
 
       if data_mode == 'label':
