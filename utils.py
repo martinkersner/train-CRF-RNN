@@ -15,3 +15,9 @@ def get_id_classes(classes):
   all_classes = pascal_classes()
   id_classes = [all_classes[c] for c in classes]
   return id_classes
+
+def strstr(str1, str2):
+  if str1.find(str2) != -1:
+    return True
+  else:
+    return False
