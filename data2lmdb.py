@@ -141,8 +141,10 @@ def preprocess_label(img, lut, mode, im_sz):
 def create_lut(class_ids, max_id=256):
   lut = np.zeros(max_id, dtype=np.uint8)
 
+  new_index = 1
   for i in class_ids:
-    lut[i] = i
+    lut[i] = new_index
+    new_index += 1
 
   return lut
 
