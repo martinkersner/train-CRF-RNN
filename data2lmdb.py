@@ -135,7 +135,8 @@ def preprocess_image(img, mode, im_sz):
 def preprocess_label(img, lut, mode, im_sz):
   img = preprocess_data(img, mode, im_sz, 'label')
   img = lut[img]
-  img = np.expand_dims(img, axis=0)
+  img = _2D_to_ND(img, len(np.unique(lut)))
+  img = img.transpose((2,0,1))
   return img
 
 def create_lut(class_ids, max_id=256):
@@ -147,6 +148,13 @@ def create_lut(class_ids, max_id=256):
     new_index += 1
 
   return lut
+
+def _2D_to_ND(label, n_levels):
+  nd_label = np.zeros((label.shape[0], label.shape[1], n_levels)).astype(np.uint8)
+  for l in range(n_levels):
+    nd_label[:,:,l] = (label==l) * 1
+
+  return nd_label
 
 def preprocess_data(img, preprocess_mode, im_sz, data_mode):
   if preprocess_mode == 'pad':
