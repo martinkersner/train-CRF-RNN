@@ -135,8 +135,9 @@ def preprocess_image(img, mode, im_sz):
 def preprocess_label(img, lut, mode, im_sz):
   img = preprocess_data(img, mode, im_sz, 'label')
   img = lut[img]
-  img = _2D_to_ND(img, len(np.unique(lut)))
-  img = img.transpose((2,0,1))
+  img = np.expand_dims(img, axis=0)
+  #img = _2D_to_ND(img, len(np.unique(lut)))
+  #img = img.transpose((2,0,1))
   return img
 
 def create_lut(class_ids, max_id=256):
