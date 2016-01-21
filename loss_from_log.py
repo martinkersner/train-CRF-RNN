@@ -53,7 +53,7 @@ def match_iteration(line):
   return re.search(r'Iteration (.*),', line)
 
 def match_loss(line):
-  return re.search(r'loss = (.*) \(', line)
+  return re.search(r'loss-ft = (.*) \(', line)
 
 def process_arguments(argv):
   if len(argv) != 2:
