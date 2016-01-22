@@ -48,10 +48,11 @@ def main():
   print("TRAIN", train_iteration, train_loss)
   print("TEST", test_iteration, test_loss)
 
-  plt.plot(train_iteration, train_loss, 'k')
-  plt.plot(test_iteration, test_loss, 'r')
-  plt.ylabel('loss')
-  plt.xlabel('number of iterations')
+  plt.plot(train_iteration, train_loss, 'k', label='Train loss')
+  plt.plot(test_iteration, test_loss, 'r', label='Test loss')
+  plt.legend()
+  plt.ylabel('Loss')
+  plt.xlabel('Number of iterations')
 
   plt.savefig('loss.png')
 
