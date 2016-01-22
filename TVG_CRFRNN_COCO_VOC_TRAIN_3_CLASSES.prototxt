@@ -143,7 +143,16 @@ layers { bottom: 'fc7' top: 'fc7' name: 'drop7' type: DROPOUT
 layers { name: 'score-fr-ft' type: CONVOLUTION bottom: 'fc7' top: 'score-ft'
   blobs_lr: 1 blobs_lr: 2 weight_decay: 1 weight_decay: 0
   #blobs_lr: 10 blobs_lr: 20 weight_decay: 1 weight_decay: 0
-  convolution_param { engine: CAFFE num_output: 4 kernel_size: 1 } } # CHANGED 3 + 1
+  convolution_param { engine: CAFFE num_output: 4 kernel_size: 1 
+    weight_filler {
+      type: "xavier"
+      std: 0.1
+    }
+    bias_filler {
+      type: "constant"
+      value: 0.2
+    }
+  } } # CHANGED 3 + 1
 
 layers { type: DECONVOLUTION name: 'score2-ft' bottom: 'score-ft' top: 'score2-ft'
   blobs_lr: 1 blobs_lr: 2 weight_decay: 1 weight_decay: 0
@@ -153,7 +162,16 @@ layers { type: DECONVOLUTION name: 'score2-ft' bottom: 'score-ft' top: 'score2-f
 layers { name: 'score-pool4-ft' type: CONVOLUTION bottom: 'pool4' top: 'score-pool4-ft'
   blobs_lr: 1 blobs_lr: 2 weight_decay: 1 weight_decay: 0
   #blobs_lr: 10 blobs_lr: 20 weight_decay: 1 weight_decay: 0
-  convolution_param { engine: CAFFE num_output: 4 kernel_size: 1 } } # CHANGED 3 + 1
+  convolution_param { engine: CAFFE num_output: 4 kernel_size: 1 
+    weight_filler {
+      type: "xavier"
+      std: 0.1
+    }
+    bias_filler {
+      type: "constant"
+      value: 0.2
+    }
+  } } # CHANGED 3 + 1
 
 layers { type: CROP name: 'crop-ft' bottom: 'score-pool4-ft' bottom: 'score2-ft'
   top: 'score-pool4c-ft' }
@@ -171,7 +189,16 @@ layers { type: DECONVOLUTION name: 'score4-ft' bottom: 'score-fused-ft'
 layers { name: 'score-pool3-ft' type: CONVOLUTION bottom: 'pool3' top: 'score-pool3-ft'
   blobs_lr: 1 blobs_lr: 2 weight_decay: 1 weight_decay: 0
   #blobs_lr: 10 blobs_lr: 20 weight_decay: 1 weight_decay: 0
-  convolution_param { engine: CAFFE num_output: 4 kernel_size: 1 } } # CHANGED 3 + 1
+  convolution_param { engine: CAFFE num_output: 4 kernel_size: 1
+    weight_filler {
+      type: "xavier"
+      std: 0.1
+    }
+    bias_filler {
+      type: "constant"
+      value: 0.2
+    }
+ } } # CHANGED 3 + 1
 
 layers { type: CROP name: 'crop-ft' bottom: 'score-pool3-ft' bottom: 'score4-ft'
   top: 'score-pool3c-ft' }
