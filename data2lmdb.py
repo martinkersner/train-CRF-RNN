@@ -18,7 +18,6 @@ def main():
   ##
   preprocess_mode = 'pad'
   im_sz = 500
-  #file_src_images = 'train.txt'
   class_names = ['bird', 'bottle', 'chair']
   test_ratio = 0.1
   image_ext = '.jpg'
@@ -33,14 +32,12 @@ def main():
   print('Train images')
   path_src = 'images/'
   path_dst = 'train_images_3_lmdb'
-  #train_imgs = get_src_imgs(file_src_images, ext)
   convert2lmdb(path_src, train_imgs, image_ext, path_dst, class_ids, preprocess_mode, im_sz, 'image')
 
   # Labels
   print('Train labels')
   path_src = 'labels/'
   path_dst = 'train_labels_3_lmdb'
-  #train_imgs = get_src_imgs(file_src_images, ext)
   convert2lmdb(path_src, train_imgs, label_ext, path_dst, class_ids, preprocess_mode, im_sz, 'label')
 
   ## Test
@@ -92,6 +89,7 @@ def get_num_lines(file_name):
 
   return num_lines
 
+# DEPRECATED
 def get_src_imgs(file_name, ext):
   src_imgs = []
 
