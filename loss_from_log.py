@@ -10,33 +10,39 @@ import matplotlib.pyplot as plt
 from utils import strstr
 
 def main():
-  log_file = process_arguments(sys.argv)
+  log_files = process_arguments(sys.argv)
 
   train_iteration = []
   train_loss      = []
   test_iteration  = []
   test_loss       = []
+  base_test_iter  = 0
+  base_train_iter = 0
 
-  with open(log_file, 'rb') as f:
-    for line in f:
+  for log_file in log_files:
+    with open(log_file, 'rb') as f:
+      if len(train_iteration) != 0:
+        base_train_iter = train_iteration[-1]
+        base_test_iter = test_iteration[-1]
 
-      # TRAIN NET
-      if strstr(line, 'Iteration') and strstr(line, 'lr'):
-        matched = match_iteration(line)
-        train_iteration.append(int(matched.group(1)))
+      for line in f:
+        # TRAIN NET
+        if strstr(line, 'Iteration') and strstr(line, 'lr'):
+          matched = match_iteration(line)
+          train_iteration.append(int(matched.group(1))+base_train_iter)
 
-      elif strstr(line, 'Train net output'):
-        matched = match_loss(line)
-        train_loss.append(float(matched.group(1)))
+        elif strstr(line, 'Train net output'):
+          matched = match_loss(line)
+          train_loss.append(float(matched.group(1)))
 
-      # TEST NET
-      elif strstr(line, 'Testing net'):
-        matched = match_iteration(line)
-        test_iteration.append(int(matched.group(1)))
+        # TEST NET
+        elif strstr(line, 'Testing net'):
+          matched = match_iteration(line)
+          test_iteration.append(int(matched.group(1))+base_test_iter)
 
-      elif strstr(line, 'Test net output'):
-        matched = match_loss(line)
-        test_loss.append(float(matched.group(1)))
+        elif strstr(line, 'Test net output'):
+          matched = match_loss(line)
+          test_loss.append(float(matched.group(1)))
 
 
   print("TRAIN", train_iteration, train_loss)
@@ -56,15 +62,18 @@ def match_loss(line):
   return re.search(r'loss-ft = (.*) \(', line)
 
 def process_arguments(argv):
-  if len(argv) != 2:
+  print(argv)
+  if len(argv) < 2:
     help()
 
-  log_file = argv[1]
-  return log_file
+  log_files = argv[1:]
+  return log_files
 
 def help():
-  print('Usage: python loss_from_log.py LOG_FILE\n'
+  print('Usage: python loss_from_log.py [LOG_FILE]+\n'
         'LOG_FILE is text file containing log produced by caffe.'
+        'At least one LOG_FILE has to be specified.'
+        'Files has to be given in correct order (the oldest logs as the first ones).'
         , file=sys.stderr)
 
   exit()
