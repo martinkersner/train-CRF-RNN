@@ -21,11 +21,12 @@ def main():
   #file_src_images = 'train.txt'
   class_names = ['bird', 'bottle', 'chair']
   test_ratio = 0.1
+  image_ext = '.jpg'
+  label_ext = '.png'
   ##
 
-  ext = '.png'
   class_ids = get_id_classes(class_names)
-  train_imgs, test_imgs = split_train_test_imgs(class_names, ext, test_ratio)
+  train_imgs, test_imgs = split_train_test_imgs(class_names, test_ratio)
 
   ## Train
   # Images
@@ -33,29 +34,29 @@ def main():
   path_src = 'images/'
   path_dst = 'train_images_3_lmdb'
   #train_imgs = get_src_imgs(file_src_images, ext)
-  convert2lmdb(path_src, train_imgs, path_dst, class_ids, preprocess_mode, im_sz, 'image')
+  convert2lmdb(path_src, train_imgs, image_ext, path_dst, class_ids, preprocess_mode, im_sz, 'image')
 
   # Labels
   print('Train labels')
   path_src = 'labels/'
   path_dst = 'train_labels_3_lmdb'
   #train_imgs = get_src_imgs(file_src_images, ext)
-  convert2lmdb(path_src, train_imgs, path_dst, class_ids, preprocess_mode, im_sz, 'label')
+  convert2lmdb(path_src, train_imgs, label_ext, path_dst, class_ids, preprocess_mode, im_sz, 'label')
 
   ## Test
   # Images
   print('Test images')
   path_src = 'images/'
   path_dst = 'test_images_3_lmdb'
-  convert2lmdb(path_src, test_imgs, path_dst, class_ids, preprocess_mode, im_sz, 'image')
+  convert2lmdb(path_src, test_imgs, image_ext, path_dst, class_ids, preprocess_mode, im_sz, 'image')
 
   # Labels
   print('Test labels')
   path_src = 'labels/'
   path_dst = 'test_labels_3_lmdb'
-  convert2lmdb(path_src, test_imgs, path_dst, class_ids, preprocess_mode, im_sz, 'label')
+  convert2lmdb(path_src, test_imgs, label_ext, path_dst, class_ids, preprocess_mode, im_sz, 'label')
 
-def split_train_test_imgs(class_names, ext, test_ratio):
+def split_train_test_imgs(class_names, test_ratio):
   train_imgs = []
   test_imgs = []
 
@@ -68,9 +69,9 @@ def split_train_test_imgs(class_names, ext, test_ratio):
     with open(file_name, 'rb') as f:
       for line in f:
         if current_line < num_test_imgs:
-          test_imgs.append(line.strip() + ext)
+          test_imgs.append(line.strip())
         else:
-          train_imgs.append(line.strip() + ext)
+          train_imgs.append(line.strip())
 
         current_line += 1
 
@@ -101,7 +102,7 @@ def get_src_imgs(file_name, ext):
 
   return src_imgs
 
-def convert2lmdb(path_src, src_imgs, path_dst, class_ids, preprocess_mode, im_sz, data_mode):
+def convert2lmdb(path_src, src_imgs, ext, path_dst, class_ids, preprocess_mode, im_sz, data_mode):
   if os.path.isdir(path_dst):
     print('DB ' + path_dst + ' already exists.\n'
           'Skip creating ' + path_dst + '.', file=sys.stderr)
@@ -114,8 +115,8 @@ def convert2lmdb(path_src, src_imgs, path_dst, class_ids, preprocess_mode, im_sz
 
   with db.begin(write=True) as in_txn:
     for idx, img_name in enumerate(src_imgs):
-      #img = imread(os.path.join(path_src + img_name))
-      img = np.array(Image.open(os.path.join(path_src + img_name)))
+      #img = imread(os.path.join(path_src + img_name)+ext)
+      img = np.array(Image.open(os.path.join(path_src + img_name)+ext))
       img = img.astype(np.uint8)
 
       if data_mode == 'label':
