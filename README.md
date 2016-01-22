@@ -25,7 +25,7 @@ ln -s $DATASETS/VOCdevkit/VOC2012/JPEGImages images
 ```
 
 ### Split classes
-In the next step we have to select only images that contain classes (in our case 3) for which we want to train our semantic segmentation algorithm. At first we create a list of all images that can be exploited for segmentation. Then we decide which classes we are interested in and specify them in *filter_images.py* (on line 15 there is set *bird*, *bottle* and *chair* class). This script will create several text files (which list images containing our desired classes) named correspondingly to selected classes. Each file has the same structure as *train.txt*. In a case of experimenting with different classes it would be wise to generate those image list for all classes from dataset.
+In the next step we have to select only images that contain classes (in our case 3) for which we want to train our semantic segmentation algorithm. At first we create a list of all images that can be exploited for segmentation. Then we decide which classes we are interested in and specify them in *filter_images.py* (on [line 15](https://github.com/martinkersner/train-CRF-RNN/blob/master/filter_images.py#L15) there is set *bird*, *bottle* and *chair* class). This script will create several text files (which list images containing our desired classes) named correspondingly to selected classes. Each file has the same structure as *train.txt*. In a case of experimenting with different classes it would be wise to generate those image list for all classes from dataset.
 
 You should be aware that if an image label is composed from more than one class in which we are interested in, that image will be always assigned to a class with lower id. This behavior could potentionally cause a problem if dataset consists of many images with the same label couples. However, this doesn't count for *background* class.
 
@@ -35,11 +35,11 @@ python filter_images.py labels/ train.txt
 ```
 
 ### Create LMDB database
-[Original CRF-RNN](https://github.com/torrvision/crfasrnn) used for training images with size 500x500 px and we will do so as well. But if, for whatever reason, one would decide for different dimensions<sup>[3](#myfootnote3)</sup> it can be changed on line 20 of *data2lmdb.py*. Currently, we expect that the larger side in no more than 500 px. Because images/labels don't always correspond to required dimensions, we padd them with zeros in order to obtain right image/label size.
+[Original CRF-RNN](https://github.com/torrvision/crfasrnn) used for training images with size 500x500 px and we will do so as well. But if, for whatever reason, one would decide for different dimensions<sup>[3](#myfootnote3)</sup> it can be changed on [line 20](https://github.com/martinkersner/train-CRF-RNN/blob/master/data2lmdb.py#L20) of *data2lmdb.py*. Currently, we expect that the larger side in no more than 500 px. Because images/labels don't always correspond to required dimensions, we padd them with zeros in order to obtain right image/label size.
 
-On line 22 we can set labels which we want to include into dataset.
+On [line 21](https://github.com/martinkersner/train-CRF-RNN/blob/master/data2lmdb.py#L21) we can set labels which we want to include into dataset.
 
-Within training we will regularly test our network's performance. Thus, besides the training data we will need a testing data. On line 23 we can set a ratio (currently 0.1 == 10 percent of data) which denotes how much percent of data from whole dataset will be included in the test data. 
+Within training we will regularly test our network's performance. Thus, besides the training data we will need a testing data. On [line 22](https://github.com/martinkersner/train-CRF-RNN/blob/master/data2lmdb.py#L22) we can set a ratio (currently 0.1 == 10 percent of data) which denotes how much percent of data from whole dataset will be included in the test data. 
 
 Following command will create four directories with training/testing data for images/labels.
 
@@ -62,7 +62,7 @@ During training we can visualize a loss using *loss_from_log.py*. Script accepts
 python loss_from_log.py train.log
 ```
 <p align="center">
-<img src="http://i.imgur.com/IEC4CAS.png?1" width=500/>
+<img src="http://i.imgur.com/jlfkY1p.png?1" width=500/>
 </p>
 
 ## FAQ
