@@ -35,8 +35,6 @@ def clear_class_logs(class_names):
       os.remove(file_name)
 
 def log_class(img_name, detected_class):
-  print(img_name)
-
   with open(detected_class + '.txt', 'ab') as f:
     print(img_name, file=f)
 
@@ -45,7 +43,6 @@ def contain_class(img_name, class_ids, class_names):
 
   for i,j in enumerate(class_ids):
     if j in np.unique(img):
-      print(np.unique(img))
       return class_names[i]
     
   return False
