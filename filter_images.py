@@ -7,7 +7,7 @@ import os
 import sys
 from skimage.io import imread
 import numpy as np
-from utils import get_id_classes 
+from utils import get_id_classes, convert_from_color_segmentation
 
 def main():
   ## 
@@ -40,6 +40,12 @@ def log_class(img_name, detected_class):
 
 def contain_class(img_name, class_ids, class_names):
   img = imread(img_name)
+
+  # If label is three-dimensional image we have to convert it to
+  # corresponding labels (0 - 20). Currently anticipated labels are from
+  # VOC pascal datasets.
+  if (len(img.shape) > 2):
+    img = convert_from_color_segmentation(img)
 
   for i,j in enumerate(class_ids):
     if j in np.unique(img):

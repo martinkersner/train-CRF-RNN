@@ -12,7 +12,7 @@ from scipy.misc import imresize
 import numpy as np
 from PIL import Image
 import caffe
-from utils import get_id_classes 
+from utils import get_id_classes, convert_from_color_segmentation
 
 def main():
   ##
@@ -132,6 +132,12 @@ def preprocess_image(img, mode, im_sz):
   return img
 
 def preprocess_label(img, lut, mode, im_sz):
+  # If label is three-dimensional image we have to convert it to
+  # corresponding labels (0 - 20). Currently anticipated labels are from
+  # VOC pascal datasets.
+  if (len(img.shape) > 2):
+    img = convert_from_color_segmentation(img)
+
   img = preprocess_data(img, mode, im_sz, 'label')
   img = lut[img]
   img = np.expand_dims(img, axis=0)
