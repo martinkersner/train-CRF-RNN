@@ -24,6 +24,7 @@ def main():
   label_ext = '.png'
   ##
 
+  labels_path = process_arguments(sys.argv)
   class_ids = get_id_classes(class_names)
   train_imgs, test_imgs = split_train_test_imgs(class_names, test_ratio)
 
@@ -36,7 +37,11 @@ def main():
 
   # Labels
   print('Train labels')
-  path_src = 'labels/'
+  if labels_path:
+    path_src = labels_path
+  else:
+    path_src = 'labels/'
+
   path_dst = 'train_labels_3_lmdb'
   convert2lmdb(path_src, train_imgs, label_ext, path_dst, class_ids, preprocess_mode, im_sz, 'label')
 
@@ -49,7 +54,10 @@ def main():
 
   # Labels
   print('Test labels')
-  path_src = 'labels/'
+  if labels_path:
+    path_src = labels_path
+  else:
+    path_src = 'labels/'
   path_dst = 'test_labels_3_lmdb'
   convert2lmdb(path_src, test_imgs, label_ext, path_dst, class_ids, preprocess_mode, im_sz, 'label')
 
@@ -178,6 +186,23 @@ def preprocess_data(img, preprocess_mode, im_sz, data_mode):
     print('Invalid preprocess mode.', file=sys.stderr)
 
   return img
+
+def process_arguments(argv):
+  new_path = None
+
+  if len(argv) > 2:
+    help()
+  elif len(argv) == 2:
+    new_path = argv[1]
+
+  return new_path
+
+def help():
+  print('Usage: python data2lmdb.py [PATH]\n'
+        'PATH points to a directory with ground truth segmentation images.'
+        , file=sys.stderr)
+
+  exit()
     
 if __name__ == '__main__':
   main()
