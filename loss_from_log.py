@@ -16,6 +16,7 @@ def main():
   train_loss      = []
   test_iteration  = []
   test_loss       = []
+  test_accuracy   = []
   base_test_iter  = 0
   base_train_iter = 0
 
@@ -42,25 +43,40 @@ def main():
 
         elif strstr(line, 'Test net output'):
           matched = match_loss(line)
-          test_loss.append(float(matched.group(1)))
-
+          if matched:
+            test_loss.append(float(matched.group(1)))
+          else:
+            matched = match_accuracy(line)
+            test_accuracy.append(float(matched.group(1)))
 
   print("TRAIN", train_iteration, train_loss)
   print("TEST", test_iteration, test_loss)
+  print("ACCURACY", test_iteration, test_accuracy)
 
+  # loss
   plt.plot(train_iteration, train_loss, 'k', label='Train loss')
   plt.plot(test_iteration, test_loss, 'r', label='Test loss')
   plt.legend()
   plt.ylabel('Loss')
   plt.xlabel('Number of iterations')
-
   plt.savefig('loss.png')
+
+  # accuracy
+  plt.clf()
+  plt.plot(test_iteration, test_accuracy, 'k', label='Test accuracy')
+  plt.legend()
+  plt.ylabel('Accuracy')
+  plt.xlabel('Number of iterations')
+  plt.savefig('accuracy.png')
 
 def match_iteration(line):
   return re.search(r'Iteration (.*),', line)
 
 def match_loss(line):
   return re.search(r'loss-ft = (.*) \(', line)
+
+def match_accuracy(line):
+  return re.search(r'seg-accuracy = (.*)', line)
 
 def process_arguments(argv):
   print(argv)
