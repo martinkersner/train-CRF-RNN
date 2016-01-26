@@ -25,14 +25,26 @@ ln -s $DATASETS/VOCdevkit/VOC2012/JPEGImages images
 ```
 
 ### Split classes
-In the next step we have to select only images that contain classes (in our case 3) for which we want to train our semantic segmentation algorithm. At first we create a list of all images that can be exploited for segmentation. Then we decide which classes we are interested in and specify them in *filter_images.py* (on [line 15](https://github.com/martinkersner/train-CRF-RNN/blob/master/filter_images.py#L15) there is set *bird*, *bottle* and *chair* class). This script will create several text files (which list images containing our desired classes) named correspondingly to selected classes. Each file has the same structure as *train.txt*. In a case of experimenting with different classes it would be wise to generate those image list for all classes from dataset.
+In the next step we have to select only images that contain classes (in our case 3) for which we want to train our semantic segmentation algorithm. At first we create a list of all images that can be exploited for segmentation. 
+
+```bash
+find labels/ -printf '%f\n' | sed 's/\.png//'  | tail -n +2 > train.txt
+```
+Ground truth segmentations in PASCAL VOC 2012 dataset are defined as RGB images. However, if you decide to use different dataset or already preprocessed segmentations, you could be working with gray-level ones whose values exactly correspondent to label indexes in documentation. Because the workflow of creating dataset for training is separated to several parts, we access some images twice. In a case that we are working with unpreprocessed ground truth segmentations, we would have to perform conversion twice. Unfortunately, this conversion is rather time consuming (~2s), therefore we suggest to run following command first. It is not mandatory though.
+
+```bash
+python convert_labels.py labels/ train.txt converted_labels/ # OPTIONAL
+```
+
+Then we decide which classes we are interested in and specify them in *filter_images.py* (on [line 15](https://github.com/martinkersner/train-CRF-RNN/blob/master/filter_images.py#L15) there is set *bird*, *bottle* and *chair* class). This script will create several text files (which list images containing our desired classes) named correspondingly to selected classes. Each file has the same structure as *train.txt*. In a case of experimenting with different classes it would be wise to generate those image list for all classes from dataset.
 
 You should be aware that if an image label is composed from more than one class in which we are interested in, that image will be always assigned to a class with lower id. This behavior could potentionally cause a problem if dataset consists of many images with the same label couples. However, this doesn't count for *background* class.
 
 ```bash
-find labels/ -printf '%f\n' | sed 's/\.png//'  | tail -n +2 > train.txt
-python filter_images.py labels/ train.txt
+python filter_images.py labels/ train.txt # in a case you DID NOT RUN convert_labels.py script
+#python filter_images.py converted_labels/ train.txt # you RUN convert_labels.py script
 ```
+
 
 ### Create LMDB database
 [Original CRF-RNN](https://github.com/torrvision/crfasrnn) used for training images with size 500x500 px and we will do so as well. But if, for whatever reason, one would decide for different dimensions<sup>[3](#myfootnote3)</sup> it can be changed on [line 20](https://github.com/martinkersner/train-CRF-RNN/blob/master/data2lmdb.py#L20) of *data2lmdb.py*. Currently, we expect that the larger side in no more than 500 px. Because images/labels don't always correspond to required dimensions, we padd them with zeros in order to obtain right image/label size.
@@ -44,7 +56,8 @@ Within training we will regularly test our network's performance. Thus, besides 
 Following command will create four directories with training/testing data for images/labels.
 
 ```bash
-python data2lmdb.py
+python data2lmdb.py # in a case you DID NOT RUN convert_labels.py script
+python data2lmdb.py converted_labels/ # you RUN convert_labels.py script
 ```
 
 ## Training
