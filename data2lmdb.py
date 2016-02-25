@@ -27,6 +27,7 @@ def main():
   labels_path = process_arguments(sys.argv)
   class_ids = get_id_classes(class_names)
   train_imgs, test_imgs = split_train_test_imgs(class_names, test_ratio)
+  save_test_images(test_imgs)
 
   ## Train
   # Images
@@ -87,6 +88,11 @@ def split_train_test_imgs(class_names, test_ratio):
   print(str(len(test_imgs)) + ' test images')
 
   return train_imgs, test_imgs
+
+def save_test_images(test_imgs, file_name='test.txt'):
+    with open(file_name, 'wb') as f:
+      for i in test_imgs:
+        print(i, file=f)
 
 def get_num_lines(file_name):
   num_lines = 0
