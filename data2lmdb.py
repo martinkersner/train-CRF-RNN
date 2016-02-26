@@ -34,6 +34,9 @@ def main():
     train_imgs, test_imgs = split_train_test_imgs(class_names, test_ratio)
     save_test_images(test_imgs)
 
+  shuffle(train_imgs)
+  shuffle(test_imgs)
+
   ## Train
   # Images
   print('Train images')
@@ -85,9 +88,6 @@ def split_train_test_imgs(class_names, test_ratio):
           train_imgs.append(line.strip())
 
         current_line += 1
-
-  shuffle(train_imgs)
-  shuffle(test_imgs)
 
   print(str(len(train_imgs)) + ' train images')
   print(str(len(test_imgs)) + ' test images')
