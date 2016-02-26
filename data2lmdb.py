@@ -25,11 +25,12 @@ def main():
   ##
 
   labels_path, train_list, test_list = process_arguments(sys.argv)
-  class_ids = get_id_classes(class_names)
   
   if train_list != None: # all classes in dataset defined using txt files
+    class_ids = range(0,21) 
     train_imgs, test_imgs = load_train_test_lists(train_list, test_list)
   else: # only specific class_labels
+    class_ids = get_id_classes(class_names)
     train_imgs, test_imgs = split_train_test_imgs(class_names, test_ratio)
     save_test_images(test_imgs)
 
