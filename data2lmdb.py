@@ -24,10 +24,14 @@ def main():
   label_ext = '.png'
   ##
 
-  labels_path = process_arguments(sys.argv)
+  labels_path, train_list, test_list = process_arguments(sys.argv)
   class_ids = get_id_classes(class_names)
-  train_imgs, test_imgs = split_train_test_imgs(class_names, test_ratio)
-  save_test_images(test_imgs)
+  
+  if train_list != None: # all classes in dataset defined using txt files
+    train_imgs, test_imgs = load_train_test_lists(train_list, test_list)
+  else: # only specific class_labels
+    train_imgs, test_imgs = split_train_test_imgs(class_names, test_ratio)
+    save_test_images(test_imgs)
 
   ## Train
   # Images
@@ -89,6 +93,14 @@ def split_train_test_imgs(class_names, test_ratio):
 
   return train_imgs, test_imgs
 
+def load_train_test_lists(train_list, test_list):
+  train_imgs, test_imgs = [], []
+
+  train_imgs = load_txt_list(train_list)
+  test_imgs  = load_txt_list(test_list)
+
+  return train_imgs, test_imgs
+
 def save_test_images(test_imgs, file_name='test.txt'):
     with open(file_name, 'wb') as f:
       for i in test_imgs:
@@ -103,16 +115,15 @@ def get_num_lines(file_name):
 
   return num_lines
 
-# DEPRECATED
-def get_src_imgs(file_name, ext):
-  src_imgs = []
+def load_txt_list(file_name):
+  python_list = []
 
   with open(file_name, 'rb') as f:
-      for img_file in f:
-        img_file = img_file.strip()
-        src_imgs.append(img_file + ext)
+      for line in f:
+        line = line.strip()
+        python_list.append(line)
 
-  return src_imgs
+  return python_list 
 
 def convert2lmdb(path_src, src_imgs, ext, path_dst, class_ids, preprocess_mode, im_sz, data_mode):
   if os.path.isdir(path_dst):
@@ -194,18 +205,25 @@ def preprocess_data(img, preprocess_mode, im_sz, data_mode):
   return img
 
 def process_arguments(argv):
-  new_path = None
+  new_labels_path = None
+  train_list = None
+  test_list  = None
 
-  if len(argv) > 2:
+  if len(argv) == 2: # different path to labels
+    new_labels_path = argv[1]
+  elif len(argv) == 3: # use ALL labels from specified training and testing lists 
+    train_list = argv[1]
+    test_list  = argv[2]
+  elif len(argv) > 3:
     help()
-  elif len(argv) == 2:
-    new_path = argv[1]
 
-  return new_path
+  return new_labels_path, train_list, test_list
 
 def help():
-  print('Usage: python data2lmdb.py [PATH]\n'
-        'PATH points to a directory with ground truth segmentation images.'
+  print('Usage: python data2lmdb.py [PATH | [TRAIN TEST]]\n'
+        'PATH  points to a directory with ground truth segmentation images,'
+        'TRAIN denotes txt file with list of images (without extension) which are supposed to used for training,'
+        'TEST  the same as TRAIN, but for testing data.'
         , file=sys.stderr)
 
   exit()
