@@ -100,6 +100,9 @@ def load_train_test_lists(train_list, test_list):
   train_imgs = load_txt_list(train_list)
   test_imgs  = load_txt_list(test_list)
 
+  print(str(len(train_imgs)) + ' train images')
+  print(str(len(test_imgs)) + ' test images')
+
   return train_imgs, test_imgs
 
 def save_test_images(test_imgs, file_name='test.txt'):
