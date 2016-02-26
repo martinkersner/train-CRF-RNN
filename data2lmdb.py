@@ -12,7 +12,7 @@ from scipy.misc import imresize
 import numpy as np
 from PIL import Image
 import caffe
-from utils import get_id_classes, convert_from_color_segmentation
+from utils import get_id_classes, convert_from_color_segmentation, create_lut
 
 def main():
   ##
@@ -173,18 +173,6 @@ def preprocess_label(img, lut, mode, im_sz):
   #img = _2D_to_ND(img, len(np.unique(lut)))
   #img = img.transpose((2,0,1))
   return img
-
-def create_lut(class_ids, max_id=256):
-  # Index 1 is the first index used in caffe for denoting labels.
-  # Therefore, index 1 is considered as default.
-  lut = np.ones(max_id, dtype=np.uint8)
-
-  new_index = 1
-  for i in class_ids:
-    lut[i] = new_index
-    new_index += 1
-
-  return lut
 
 def _2D_to_ND(label, n_levels):
   nd_label = np.zeros((label.shape[0], label.shape[1], n_levels)).astype(np.uint8)
