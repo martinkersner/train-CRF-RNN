@@ -27,7 +27,7 @@ def main():
   labels_path, train_list, test_list = process_arguments(sys.argv)
   
   if train_list != None: # all classes in dataset defined using txt files
-    class_ids = range(0,21) 
+    class_ids = range(1,21) 
     train_imgs, test_imgs = load_train_test_lists(train_list, test_list)
   else: # only specific class_labels
     class_ids = get_id_classes(class_names)
@@ -37,11 +37,13 @@ def main():
   shuffle(train_imgs)
   shuffle(test_imgs)
 
+  num_classes = str(len(class_ids))
+
   ## Train
   # Images
   print('Train images')
   path_src = 'images/'
-  path_dst = 'train_images_3_lmdb'
+  path_dst = 'train_images_' + num_classes + '_lmdb'
   convert2lmdb(path_src, train_imgs, image_ext, path_dst, class_ids, preprocess_mode, im_sz, 'image')
 
   # Labels
@@ -51,14 +53,14 @@ def main():
   else:
     path_src = 'labels/'
 
-  path_dst = 'train_labels_3_lmdb'
+  path_dst = 'train_labels_' + num_classes + '_lmdb'
   convert2lmdb(path_src, train_imgs, label_ext, path_dst, class_ids, preprocess_mode, im_sz, 'label')
 
   ## Test
   # Images
   print('Test images')
   path_src = 'images/'
-  path_dst = 'test_images_3_lmdb'
+  path_dst = 'test_images_' + num_classes + '_lmdb'
   convert2lmdb(path_src, test_imgs, image_ext, path_dst, class_ids, preprocess_mode, im_sz, 'image')
 
   # Labels
@@ -67,7 +69,7 @@ def main():
     path_src = labels_path
   else:
     path_src = 'labels/'
-  path_dst = 'test_labels_3_lmdb'
+  path_dst = 'test_labels_' + num_classes + '_lmdb'
   convert2lmdb(path_src, test_imgs, label_ext, path_dst, class_ids, preprocess_mode, im_sz, 'label')
 
 def split_train_test_imgs(class_names, test_ratio):
