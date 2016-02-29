@@ -62,9 +62,9 @@ def strstr(str1, str2):
     return False
 
 def create_lut(class_ids, max_id=256):
-  # Index 1 is the first index used in caffe for denoting labels.
-  # Therefore, index 1 is considered as default.
-  lut = np.ones(max_id, dtype=np.uint8)
+  # Index 0 is the first index used in caffe for denoting labels.
+  # Therefore, index 0 is considered as default.
+  lut = np.zeros(max_id, dtype=np.uint8)
 
   new_index = 1
   for i in class_ids:
