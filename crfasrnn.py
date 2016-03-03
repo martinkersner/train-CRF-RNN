@@ -18,18 +18,20 @@ import caffe
 import matplotlib.pyplot as plt
 from utils import palette_demo 
 
-# TODO control if model exists
 # TODO concatenate input and output image
 
 def main():
   iteration, image_paths = process_arguments(sys.argv)
 
   if iteration:
-    model_file = 'TVG_CRFRNN_COCO_VOC_TEST_3_CLASSES.prototxt'
-    pretrained = 'models/train_iter_{}.caffemodel'.format(iteration)
+    prototxt = 'TVG_CRFRNN_COCO_VOC_TEST_3_CLASSES.prototxt'
+    model = 'models/train_iter_{}.caffemodel'.format(iteration)
   else:
-    model_file = 'TVG_CRFRNN_COCO_VOC.prototxt_BACKUP'
-    pretrained = 'TVG_CRFRNN_COCO_VOC.caffemodel'
+    prototxt = 'TVG_CRFRNN_COCO_VOC.prototxt'
+    model = 'TVG_CRFRNN_COCO_VOC.caffemodel'
+
+  if not exist_model(model, prototxt):
+    help()
   
   # default images (part of http://www.cs.berkeley.edu/~bharath2/codes/SBD/download.html)
   if not image_paths:
@@ -39,7 +41,7 @@ def main():
 
   palette = palette_demo()
 
-  net = caffe.Segmenter(model_file, pretrained, True)
+  net = caffe.Segmenter(prototxt, model, True)
   for path in image_paths:
     image, cur_h, cur_w = preprocess_image(path)
     if image == None:
@@ -87,6 +89,16 @@ def postprocess_label(segmentation, cur_h, cur_w, palette):
 def create_label_name(orig_path):
   return 'label_' + os.path.splitext(os.path.basename(orig_path))[0] + '.png'
 
+def exist_model(model, prototxt):
+  if not os.path.exists(model):
+    print('Model ' + model + ' does not exist! Exiting.', file=sys.stderr)
+    return False
+  elif not os.path.exists(prototxt):
+    print('Prototxt' + prototxt + ' does not exist! Exiting.', file=sys.stderr)
+    return False
+
+  return True
+
 def process_arguments(argv):
   num_args = len(argv)
 
@@ -104,7 +116,7 @@ def process_arguments(argv):
 
 def help():
   print('Usage: python crfasrnn.py [ITERATION_NUM [IMAGE, IMAGE, ...]\n'
-        'ITERATION_NUM denotes iteration number of model which shall be run.'
+        'ITERATION_NUM denotes iteration number of model which shall be run.\n'
         'IMAGE one or more images can be passed as arguments.'
         , file=sys.stderr)
 
