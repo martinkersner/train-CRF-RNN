@@ -1,0 +1,6 @@
+[submodule "py-img-seg-eval"]
+	path = py-img-seg-eval
+	url = https://github.com/martinkersner/py-img-seg-eval
+[submodule "py_img_seg_eval"]
+	path = py_img_seg_eval
+	url = https://github.com/martinkersner/py_img_seg_eval.git
