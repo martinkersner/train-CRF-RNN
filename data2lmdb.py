@@ -217,8 +217,8 @@ def process_arguments(argv):
 
 def help():
   print('Usage: python data2lmdb.py [PATH | [TRAIN TEST]]\n'
-        'PATH  points to a directory with ground truth segmentation images,'
-        'TRAIN denotes txt file with list of images (without extension) which are supposed to used for training,'
+        'PATH  points to a directory with ground truth segmentation images,\n'
+        'TRAIN denotes txt file with list of images (without extension) which are supposed to used for training,\n'
         'TEST  the same as TRAIN, but for testing data.'
         , file=sys.stderr)
 
