@@ -17,6 +17,12 @@ def main():
   test_iteration  = []
   test_loss       = []
   test_accuracy   = []
+
+  pixel_accuracy        = []
+  mean_accuracy         = []
+  mean_IU               = []
+  frequency_weighted_IU = []
+
   base_test_iter  = 0
   base_train_iter = 0
 
@@ -35,6 +41,23 @@ def main():
         elif strstr(line, 'Train net output'):
           matched = match_loss(line)
           train_loss.append(float(matched.group(1)))
+
+        elif strstr(line, 'pixel_accuracy'):
+          matched = re.search(r'pixel_accuracy: (.*)', line)
+          pixel_accuracy.append(float(matched.group(1)))
+
+        elif strstr(line, 'mean_accuracy'):
+          matched = re.search(r'mean_accuracy: (.*)', line)
+          mean_accuracy.append(float(matched.group(1)))
+
+        elif strstr(line, 'mean_IU'):
+          matched = re.search(r'mean_IU: (.*)', line)
+          mean_IU.append(float(matched.group(1)))
+
+        elif strstr(line, 'frequency_weighted'):
+          matched = re.search(r'frequency_weighted: (.*)', line)
+          frequency_weighted_IU.append(float(matched.group(1)))
+
 
         # TEST NET
         elif strstr(line, 'Testing net'):
@@ -61,13 +84,15 @@ def main():
   plt.xlabel('Number of iterations')
   plt.savefig('loss.png')
 
-  # accuracy
+  # evaluation
   plt.clf()
-  plt.plot(test_iteration, test_accuracy, 'k', label='Test accuracy')
-  plt.legend()
-  plt.ylabel('Accuracy')
-  plt.xlabel('Number of iterations')
-  plt.savefig('accuracy.png')
+  plt.plot(range(len(pixel_accuracy)), pixel_accuracy, 'k', label='pixel accuracy')
+  plt.plot(range(len(mean_accuracy)), mean_accuracy, 'r', label='mean accuracy')
+  plt.plot(range(len(mean_IU)), mean_IU, 'g', label='mean IU')
+  plt.plot(range(len(frequency_weighted_IU)), frequency_weighted_IU, 'b', label='frequency weighted IU')
+  plt.legend(loc=0)
+  plt.savefig('evaluation.png')
+
 
 def match_iteration(line):
   return re.search(r'Iteration (.*),', line)
