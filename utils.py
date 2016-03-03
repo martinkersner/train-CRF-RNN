@@ -38,6 +38,15 @@ def pascal_palette():
 
   return palette
 
+def palette_demo():
+  palette_list = pascal_palette().keys()
+  palette = ()
+  
+  for color in palette_list:
+    palette += color
+
+  return palette
+
 def convert_from_color_segmentation(arr_3d):
   arr_2d = np.zeros((arr_3d.shape[0], arr_3d.shape[1]), dtype=np.uint8)
   palette = pascal_palette()
