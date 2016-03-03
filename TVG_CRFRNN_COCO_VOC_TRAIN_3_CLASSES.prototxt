@@ -228,9 +228,9 @@ layers {
   blobs_lr: 0.001
   blobs_lr: 0.001
   blobs_lr: 0.01 #new parameter
-  #blobs_lr: 0.01
-  #blobs_lr: 0.01
-  #blobs_lr: 0.1 #new parameter
+  #blobs_lr: 10000 
+  #blobs_lr: 10000 
+  #blobs_lr: 1000 #new parameter
   multi_stage_meanfield_param {
    num_iterations: 5
    compatibility_mode: POTTS
