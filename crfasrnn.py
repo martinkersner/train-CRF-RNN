@@ -19,7 +19,6 @@ import matplotlib.pyplot as plt
 from utils import palette_demo 
 
 # TODO control if model exists
-# TODO control if image(s) exist 
 # TODO concatenate input and output image
 
 def main():
@@ -42,16 +41,24 @@ def main():
 
   net = caffe.Segmenter(model_file, pretrained, True)
   for path in image_paths:
-    print('Processing ' + path + '...', end='')
     image, cur_h, cur_w = preprocess_image(path)
+    if image == None:
+        print(path + ' does not exist! Skipping.' , file=sys.stderr)
+        continue
+
+    print('Processing ' + path + '...', end='')
+
     segmentation = net.predict([image])
-    output_im = postprocess_label(segmentation, cur_h, cur_w, palette)
+    segm_post = postprocess_label(segmentation, cur_h, cur_w, palette)
     
-    plt.imshow(output_im)
+    plt.imshow(segm_post)
     plt.savefig(create_label_name(path))
     print('finished.')
 
 def preprocess_image(image_path):
+  if not os.path.exists(image_path):
+    return None, 0, 0
+
   input_image = 255 * caffe.io.load_image(image_path)
   
   image = PILImage.fromarray(np.uint8(input_image))
