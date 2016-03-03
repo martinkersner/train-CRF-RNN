@@ -8,6 +8,9 @@ This repository contains Python scripts necessary for training [CRF-RNN for Sema
 git clone https://github.com/martinkersner/train-CRF-RNN
 ```
 
+## Prerequisites 
+In order to be able to train CRF-RNN you will need to install caffe from [CRF-RNN](https://github.com/torrvision/crfasrnn).
+
 ## Prepare dataset for training
 First, you will need images with corresponding semantic labels. The easiest way is to employ [PASCAL VOC](http://host.robots.ox.ac.uk/pascal/VOC/voc2012/index.html) dataset (!2GB) which provides those image/label pairs. Dataset consist of 21 different classes<sup>[1](#myfootnote1)</sup>, but in this example we will use only three of them in order to demonstrate training with different number classes than it was used in [original CRF-RNN](https://github.com/torrvision/crfasrnn).
 
@@ -57,7 +60,7 @@ Following command will create four directories with training/testing data for im
 
 ```bash
 python data2lmdb.py # in a case you DID NOT RUN convert_labels.py script
-python data2lmdb.py converted_labels/ # you RUN convert_labels.py script
+#python data2lmdb.py converted_labels/ # you RUN convert_labels.py script
 ```
 
 ## Training
