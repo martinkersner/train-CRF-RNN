@@ -5,7 +5,7 @@ Martin Kersner, <m.kersner@gmail.com>
 This repository contains Python scripts necessary for training [CRF-RNN for Semantic Image Segmentation](https://github.com/torrvision/crfasrnn) with 3 classes. 
 
 ```bash
-git clone https://github.com/martinkersner/train-CRF-RNN
+git clone --recursive https://github.com/martinkersner/train-CRF-RNN
 ```
 
 ## Prerequisites 
