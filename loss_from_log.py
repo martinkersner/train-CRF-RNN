@@ -104,7 +104,6 @@ def match_accuracy(line):
   return re.search(r'seg-accuracy = (.*)', line)
 
 def process_arguments(argv):
-  print(argv)
   if len(argv) < 2:
     help()
 
