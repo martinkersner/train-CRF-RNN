@@ -30,7 +30,7 @@ def main():
         imsave(os.path.join(path_converted, img_base_name) + ext, img)
       else:
         print(img_name + " is not composed of three dimensions, therefore " 
-              "should be processed by this script.\n"
+              "shouldn't be processed by this script.\n"
               "Exiting." , file=sys.stderr)
 
         exit()
