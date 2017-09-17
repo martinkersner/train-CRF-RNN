@@ -51,11 +51,9 @@ def convert_from_color_segmentation(arr_3d):
   arr_2d = np.zeros((arr_3d.shape[0], arr_3d.shape[1]), dtype=np.uint8)
   palette = pascal_palette()
 
-  # slow!
-  for i in range(0, arr_3d.shape[0]):
-    for j in range(0, arr_3d.shape[1]):
-      key = (arr_3d[i,j,0], arr_3d[i,j,1], arr_3d[i,j,2])
-      arr_2d[i, j] = palette.get(key, 0) # default value if key was not found is 0
+  for c, i in palette.items():
+    m = np.all(arr_3d == np.array(c).reshape(1, 1, 3), axis=2)
+    arr_2d[m] = i
 
   return arr_2d
 
