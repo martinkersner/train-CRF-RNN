@@ -1,0 +1,24 @@
+Copyright (c) 2015, the University of Oxford
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+
+1. Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
+
+2. Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
+
+3. Neither the name of the copyright holder nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+
+Appendix:
+CRF-RNN feature in Caffe is implemented for the paper: Shuai Zheng, Sadeep Jayasumana, Bernardino Romera-Paredes, Vibhav Vineet, Zhizhong Su, Dalong Du, Chang Huang, Philip H. S. Torr. Conditional Random Fields as Recurrent Neural Networks. IEEE ICCV 2015.
+
+Shuai Zheng, Sadeep Jayasumana, Bernardino Romera-Paredes, and Philip H. S. Torr are with University of Oxford. Vibhav Vineet did this work when he was with the University of Oxford, he is now with the Stanford University. Zhizhong Su, Dalong Du, Chang Huang are with the Baidu Institute of Deep Learning (IDL).
+
+CRF-RNN uses the Permutohedral lattice library, the DenseCRF library and the Caffe future version.
+
+Permutohedral lattice library (BSD license) is from Andrew Adams, Jongmin Baek, Abe Davis. Fast High-Dimensional Filtering Using the Permutohedral Lattice. Eurographics 2010. DenseCRF library from Philipp Krahenbuhl and Vladlen Koltun. Efficient Inference in Fully Connected CRFs with Gaussian Edge Potentials. NIPS 2011.
+
+For more information about CRF-RNN please vist the project website http://crfasrnn.torr.vision. Contact: crfasrnn@gmail.com
